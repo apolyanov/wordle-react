@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  wordle-api:
+    container_name: wordle-api
+    depends_on:
+      - wordle-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://wordle-db:5432/wordle_database
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    build: ../wordle-backend/
+    ports:
+      - "8080:8080"
+
+  wordle-db:
+    container_name: wordle-db
+    image: postgres
+    environment:
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=root
+    ports:
+      - "5432:5432"
+
+  wordle-front-end:
+    container_name:   wordle-front-end
+    build: ../wordle-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - wordle-api
